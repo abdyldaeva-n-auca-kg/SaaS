@@ -1,0 +1,30 @@
+name: CI
+
+on: 
+ push:
+  branches: ["main", "dev"]
+ pull_request:
+  branches: ["main", "dev"]
+ workflow_dispatch:
+
+jobs:
+ builds:
+  runs-on: ubuntu:latest
+  steps:
+   - name: Checkout code
+    uses: actions/checkout@v2
+
+   - name: Install Elixir and dependencies
+    uses: erlef/setup-beam@v1
+    with:
+     otp-version: 25.0
+     elixir-version: 1.14.4
+
+   - name: Run tests
+    run: mix test
+
+   - name: Lint with Credo
+    run: mix credo
+
+   - name: Format with elixir formatter
+    run: mix format -- check formatted
